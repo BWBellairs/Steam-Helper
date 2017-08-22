@@ -1,5 +1,5 @@
 # Steam-Helper
-##Steam Helper: Grants you better control of your Steam Game Updates
+## Steam Helper: Grants you better control of your Steam Game Updates
 
 Tired of downloading game updates during the day and want to schedule them for the night?
 Or perhaps you want to shutdown your computer or put it to sleep after downloading game updates?
