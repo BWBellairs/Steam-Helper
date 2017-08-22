@@ -1,5 +1,3 @@
-
-
 @ECHO off
 COLOR 03
 
@@ -16,11 +14,12 @@ IF "%ERRORLEVEL%"=="0" (
   GOTO :do_shutdown_options
 )
 
-SET /p st_delay="Enter Number of Seconds to wait before starting steam: "
+SET /P st_delay="Enter Number of Seconds to wait before starting steam: "
+SET /A st_delay=%st_delay%
 ECHO:
 
 :do_shutdown_options
-SET /p sh_delay_active="Want to shutdown after a delay or use Smart Shutdown? y/n "
+SET /P sh_delay_active="Want to shutdown after a delay or use Smart Shutdown? y/n "
 ECHO:
 
 SET "smart_shutdown_enabled="
@@ -28,14 +27,14 @@ SET "sh_mode="
 SET "sh_delay="
 IF "%sh_delay_active%"=="y" (
 
-  SET /p smart_shutdown_enabled="Would you like to enable Smart Shutdown? Computer will shutdown when it has detected that Steam isn't downloading any updates for games. y/n "
+  SET /P smart_shutdown_enabled="Would you like to enable Smart Shutdown? Computer will shutdown when it has detected that Steam isn't downloading any updates for games. y/n "
 
   IF NOT "!smart_shutdown_enabled!" EQU "y" (
-    SET /p sh_delay="Enter Number of Seconds to wait before shutting down (Do an hour after the download eta) "
+    SET /P sh_delay="Enter Number of Seconds to wait before shutting down (Do an hour after the download eta) "
 
   )
 
-  SET /p sh_mode="Shutdown mode restart(r) shutdown (s) hibernate/sleep (h): "
+  SET /P sh_mode="Shutdown mode restart(r) shutdown (s) hibernate/sleep (h): "
 
   ECHO:
 
@@ -46,7 +45,7 @@ IF "%ERRORLEVEL%"=="1" (
 
   IF not defined sh_delay (
     ECHO Looks like Steam isn't active... Did the Process exit?
-	SET /p st_delay="Enter Number of Seconds to wait before starting steam: "
+	SET /P st_delay="Enter Number of Seconds to wait before starting steam: "
     ECHO:
   )
 
@@ -77,7 +76,7 @@ If "%sh_delay_active%" EQU "y" (
 
     SHUTDOWN /%sh_mode% /t 120
     PAUSE
-	EXIT
+    EXIT
   )
 )
 
