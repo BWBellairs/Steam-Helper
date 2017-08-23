@@ -12,6 +12,6 @@ Both features above are optional
 
 `
 Seeing as this is a batch script it looks kinda bland but I'm aiming to create a visual application for it and making it cross platform.
-It's only usable with the WIindows OS right now.
+It's only usable with the Windows OS right now.
 `
 `
