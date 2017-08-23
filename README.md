@@ -15,3 +15,8 @@ Just download and run the script to use it. It's that simple.
 
 If you do find bugs, please report them by creating an issue.
 Thanks, BWBellairs
+
+`
+I am aiming to make this project cross platform.
+Ubuntu users hold on
+`
