@@ -1,7 +1,7 @@
 @ECHO off
 COLOR 03
 
-REM --- Created by BWBellairs --- Version: 1.3.42
+REM --- Created by BWBellairs --- Version: 1.4.8
 
 setlocal EnableExtensions EnableDelayedExpansion
 
@@ -21,9 +21,11 @@ SET /A st_delay=%st_delay%
 ECHO:
 
 :do_shutdown_options
-SET /P sh_delay_active="Want to shutdown after a delay or use Smart Shutdown? y/n "
-ECHO %sh_delay_active%|FINDSTR /R /C:"^[y|n]$" > NUL
-IF "%ERRORLEVEL%"=="1" GOTO :do_shutdown_options
+SET "sh_delay_active=n"
+CHOICE /M "Want to shutdown after a delay or use Smart Shutdown?"
+IF "%ERRORLEVEL%"=="1" (
+  SET "sh_delay_active=y"
+)
 ECHO:
 
 SET "smart_shutdown_enabled="
@@ -31,27 +33,23 @@ SET "sh_mode="
 SET "sh_delay="
 IF "%sh_delay_active%"=="y" (
 
-  :start_shutdown_enabled_loop
-  SET /P smart_shutdown_enabled="Would you like to enable Smart Shutdown? Computer will shutdown when it has detected that Steam isn't downloading any updates for games. y/n "
-  ECHO !smart_shutdown_enabled!|FINDSTR /R /C:"^[y|n]$" > NUL
-  IF "!ERRORLEVEL!"=="1" GOTO :start_shutdown_enabled_loop
+  SET "smart_shutdown_enabled=n"
+  CHOICE /M "Would you like to enable Smart Shutdown? Computer will shutdown when it has detected that Steam isn't downloading any updates for games."
+  IF "!ERRORLEVEL!"=="1" (
+    SET "smart_shutdown_enabled=y"
+  )
 
   IF NOT "!smart_shutdown_enabled!" EQU "y" (
 
-    SET /P sh_delay="Enter Number of Seconds to wait before shutting down (Do an hour after the download eta) "
-    SET /A sh_delay=%sh_delay%
+    SET /P "sh_delay=Enter Number of Seconds to wait before shutting down (Do an hour after the download eta) "
+    SET /A sh_delay=!sh_delay!
 
   )
-
-  :start_mode_loop
-  ECHO %sh_mode%|FINDSTR /R /C:"^[s|h|r|S|H|R]$" > nul
-
-  IF "!ERRORLEVEL!"=="1" (
  
-   SET /P sh_mode="Shutdown mode restart(r) shutdown (s) hibernate/sleep (h): "
-   GOTO :start_mode_loop
-
-  )
+  CHOICE /C rsh /M "Shutdown mode restart(r) shutdown (s) hibernate/sleep (h): "
+  IF "!ERRORLEVEL!"=="1" (SET "sh_mode=r")
+  IF "!ERRORLEVEL!"=="2" (SET "sh_mode=s")
+  IF "!ERRORLEVEL!"=="3" (SET "sh_mode=h")
  
   ECHO:
 
@@ -84,15 +82,17 @@ IF "%ERRORLEVEL%"=="1" (
 
 If "%sh_delay_active%" EQU "y" (
   
-  IF NOT "%smart_shutdown_enabled%" EQU "y" (
+  IF NOT "!smart_shutdown_enabled!" EQU "y" (
     ECHO Starting Shutdown delay with mode %sh_mode%
 
-    TIMEOUT /t %sh_delay% /nobreak
+    TIMEOUT /t !sh_delay! /nobreak
 
     ECHO Preparing to shutdown... if you wish to stop this, press WINDOWS KEY, type 'shutdown /a' then press ENTER
     ECHO Shutting down...
 
-    SHUTDOWN /%sh_mode% /t 120
+    ECHO SHUTDOWN /!sh_mode! /t 120
+    IF "!sh_mode!"=="h" (SHUTDOWN /!sh_mode!
+    )ELSE (SHUTDOWN /!sh_mode! /t 120)
     PAUSE
     EXIT
   )
@@ -102,7 +102,7 @@ SET \A shutdown_attempts=0
 
 IF "%sh_delay_active%" EQU "y" (
 
-  IF "%smart_shutdown_enabled%" EQU "y" (
+  IF "!smart_shutdown_enabled!" EQU "y" (
 
     ECHO Waiting for Steam to cease activity before shutting down
 
@@ -119,8 +119,8 @@ IF "%sh_delay_active%" EQU "y" (
 
       )  
 
-      PING www.google.com -n 1 -w 1000 > nul
-      IF "%ERRORLEVEL%"=="1" (SET internet_connected="false") else (SET internet_connected="true")
+      PING www.google.com -n 1 -w 1000 > NUL
+      IF "!ERRORLEVEL!"=="1" (SET internet_connected="false") else (SET internet_connected="true")
 
       IF "!internet_connected!"=="false" (SET /a shutdown_attempts=0)
 
@@ -132,7 +132,8 @@ IF "%sh_delay_active%" EQU "y" (
       ECHO Preparing to shutdown... if you wish to stop this, press WINDOWS KEY, type 'shutdown /a' then press ENTER
       ECHO Shutting down...
 
-      SHUTDOWN /%sh_mode% /t 120
+      IF "!sh_mode!"=="h" (SHUTDOWN /!sh_mode!
+      )ELSE (SHUTDOWN /!sh_mode! /t 120)
       PAUSE
       EXIT
     )
