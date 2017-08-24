@@ -90,7 +90,6 @@ If "%sh_delay_active%" EQU "y" (
     ECHO Preparing to shutdown... if you wish to stop this, press WINDOWS KEY, type 'shutdown /a' then press ENTER
     ECHO Shutting down...
 
-    ECHO SHUTDOWN /!sh_mode! /t 120
     IF "!sh_mode!"=="h" (SHUTDOWN /!sh_mode!
     )ELSE (SHUTDOWN /!sh_mode! /t 120)
     PAUSE
