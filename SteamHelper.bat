@@ -58,18 +58,8 @@ IF "%sh_delay_active%"=="y" (
 TASKLIST /FI "IMAGENAME eq Steam.exe" 2>NUL | find /I /N "Steam.exe">NUL
 IF "%ERRORLEVEL%"=="1" (
 
-  IF not defined sh_delay (
-    
-    ECHO Looks like Steam isn't active... Did the Process exit?
-    SET /P st_delay="Enter Number of Seconds to wait before starting steam: "
-    SET /A st_delay=%st_delay%
-    ECHO:
-  
-  )
-
   ECHO Starting Steam in !st_delay! seconds
   TIMEOUT /t !st_delay! /nobreak
-
 
   ECHO:
   ECHO Starting Steam
@@ -77,6 +67,9 @@ IF "%ERRORLEVEL%"=="1" (
   START steam://
 
   ECHO Steam launched
+  
+  REM Let's wait 15 seconds before starting the shutdown loop. (if steam updates, that doesn't matter as it will still be using disk/network)
+  TIMEOUT /t 15 /nobreak
 
 )
 
