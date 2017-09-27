@@ -10,6 +10,8 @@ I also added a feature in which your computer can shutdown/hibernate/restart whe
 
 Both features above are optional
 
+##### NOTICE: If it doesn't run on Windows and exits as soon as you run it, try running as administrator. (Right Click File > Run as administrator)
+
 `
 Seeing as this is a batch script it looks kinda bland but I'm aiming to create a visual application for it and making it cross platform.
 It's only usable with the Windows OS right now.
